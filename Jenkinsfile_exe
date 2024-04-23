@@ -1,5 +1,8 @@
 pipeline {
   agent any
+  parameters {
+    string(name: 'MESSAGE', defaultValue: 'HELLO', description: 'Enter your message')
+  }
   stages {
     stage('1') {
       steps {
@@ -10,9 +13,14 @@ pipeline {
       steps {
         sh'''
           mkdir exe02_folder
-          echo success > exe02_folder/exe02_file
+          echo success >> exe02_folder/exe02_file
         '''
       }
+    }
+    stage('3-Deploy') {
+      steps {
+        echo "message: ${params.MESSAGE}"
+      }   
     }
   }
 }
