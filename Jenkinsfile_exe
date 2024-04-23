@@ -3,6 +3,9 @@ pipeline {
   parameters {
     string(name: 'MESSAGE', defaultValue: 'HELLO', description: 'Enter your message')
   }
+  environment {
+    MY_DIR = 'build_directory'
+  }
   stages {
     stage('Create') {
       steps {
@@ -27,10 +30,32 @@ pipeline {
         sh 'echo "Build Information" > build_info.txt'
       }
     }
-  }
-post {
-      always {
-        archiveArtifacts artifacts: 'build_info.txt', onlyIfSuccessful: true
+    stage('ENV Dir') {
+      steps {
+        script {
+          sh "mkdir -p ${env.MY_DIR}"
+        }
       }
     }
+    stage('Copy Info') {
+      steps {
+        script {
+          sh "echo 'Build Number: ${BUILD_NUMBER}\nJob Name: ${JOB_NAME}' > ${env.MY_DIR}/info.txt"
+        }
+      }
+    }
+    stage('Check Info') {
+      steps {
+        script {
+          sh "cat ${env.MY_DIR}/info.txt"
+        }
+      }
+    }
+  }
+  post {
+    always {
+      archiveArtifacts artifacts: 'build_info.txt', onlyIfSuccessful: true
+    }
+  }
 }
+
