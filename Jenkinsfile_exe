@@ -22,5 +22,15 @@ pipeline {
         echo "message: ${params.MESSAGE}"
       }   
     }
+    stage('Archiving Artifacts') {
+      steps {
+        sh 'echo "Build Information" > build_info.txt'
+      }
+    }
+    post {
+      always {
+        archiveArtifacts artifacts: 'build_info.txt', onlyIfSuccessful: true
+      }
+    }
   }
 }
