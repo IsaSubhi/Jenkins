@@ -5,6 +5,14 @@ pipeline {
       steps {
         echo "Hello Jenkins!"
       }
-    }  
+    }
+    stage('Execute Shell') {
+      steps {
+        sh'''
+          mkdir exe02_folder
+          echo success >> exe02_folder/exe02_file
+        '''
+      }
+    }
   }
 }
