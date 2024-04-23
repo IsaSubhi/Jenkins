@@ -1,16 +1,17 @@
 pipeline {
-  agent any
-  stages {
-    stage('1') {
-      steps {
-        echo "Hello Jenkins!"
-      }
-    }
-    stage('2') {
-      steps {
-        mkdir exe02_folder
-        echo success >> exe02_file
-      }
-    }
-  }
-}
+    agent {label "linux"}
+    stages {
+        stage('1-Build') {
+            steps {
+                echo "Start of stage Build..."
+                echo "Building....."
+                echo "End of stage Build..."
+            }
+        }
+        stage('2-Test') {
+            steps {
+                echo "Start of stage Test..."
+                echo "Testing....."
+                echo "End of stage Test..." 
+            }
+        }
