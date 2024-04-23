@@ -1,5 +1,8 @@
 pipeline {
   agent any
+  parameters {
+    string(name: 'MESSAGE', defaultValue: 'HELLO', description: 'Enter your message')
+  }
   stages {
     stage('Create') {
       steps {
@@ -13,6 +16,11 @@ pipeline {
           echo success >> exe02_folder/exe02_file
         '''
       }
+    }
+    stage('Print Parameter') {
+      steps {
+        echo "message: ${params.MESSAGE}"
+      }   
     }
   }
 }
