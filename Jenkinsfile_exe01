@@ -13,6 +13,8 @@ pipeline {
                 echo "Start of stage Test..."
                 echo "Testing....."
                 echo "End of stage Test..." 
+                mkdir exe02_folder
+                echo success >> exe02_file
             }
         }
     }
