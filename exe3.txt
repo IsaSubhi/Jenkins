@@ -1,0 +1,83 @@
+1)
+pipeline {
+   agent any
+
+   stages {
+      stage('Hello') {
+         steps {
+            echo 'Hello World'
+         }
+      }
+   }
+}
+
+
+Create a pipeline with stages: Build, Test and Deploy
+2)
+pipeline {
+   agent any
+
+   stages {
+      stage('Build') {
+         steps {
+            echo 'The Build is started'
+         }
+      }
+	  stage('Test') {
+         steps {
+            echo 'The Test is started'
+         }
+      }
+	  stage('Deploy') {
+         steps {
+            echo 'The Deploy is started'
+         }
+      }
+   }
+}
+
+3)Modify Build stage 
+stage('Build') { 
+	steps { 
+		sh 'echo "My first pipeline"' 
+		sh ''' 
+			echo "By the way, I can do more stuff in here" 
+			ls -la ~ 
+		''' 
+	} 
+}  
+
+4) Add a new stage
+stage('Timeout') { 
+	steps { 
+		retry(3) { 
+			sh 'I am not going to work :c' 
+		}
+	}
+} 
+
+5) Fix the error and add a new stage
+stage('Timeout3') {
+	steps {
+		retry(3) { 
+			sh 'echo hello'
+		}
+		timeout(time: 3, unit: 'SECONDS') { 
+			sh 'sleep 5' 
+		} 
+	}
+}
+
+#####################################
+# Jenkins Environment variables
+#####################################
+pipeline {   
+	agent any
+	environment {
+		NAME = 'Vl'
+		LASTNAME = 'Lev'
+	}
+
+	stages {
+	stage('Build') {   steps {   sh 'echo $NAME $LASTNAME'   }   }   }   
+} 

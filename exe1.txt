@@ -1,0 +1,59 @@
+pipeline {
+    agent any
+    triggers {
+        pollSCM '* * * * *'
+    }    
+    stages {
+        stage('Create File') {
+            steps {
+                sh 'echo "Build Information" > build_info.txt'
+            }
+        }
+    }
+    post {
+        always {
+            archiveArtifacts artifacts: 'build_info.txt', onlyIfSuccessful: true
+        }
+    }
+}
+
+5.
+pipeline {
+    agent any
+    triggers {
+        pollSCM '* * * * *'
+    }
+    environment {
+        // Define an environment variable
+        MY_DIR = 'build_directory'
+    }
+
+    stages {
+        stage('Create Directory') {
+            steps {
+                script {
+                    // Use a shell command to create a directory named after the environment variable
+                    sh "mkdir -p ${env.MY_DIR}"
+                }
+            }
+        }
+
+        stage('Create File') {
+            steps {
+                script {
+                    // Create a text file in the directory with details about the build
+                    sh "echo 'Build Number: ${BUILD_NUMBER}\nJob Name: ${JOB_NAME}' > ${env.MY_DIR}/info.txt"
+                }
+            }
+        }
+
+        stage('Check File') {
+            steps {
+                script {
+                    // Display the contents of the file to verify it
+                    sh "cat ${env.MY_DIR}/info.txt"
+                }
+            }
+        }
+    }
+}
